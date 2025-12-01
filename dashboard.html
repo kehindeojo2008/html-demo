@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <style>
+        /* Custom styles for better aesthetics */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* --- General Body and Layout --- */
+:root {
+    --primary-blue: #3b82f6; /* Blue-600 */
+    --hover-blue: #2563eb; /* Blue-700 */
+    --secondary-indigo: #4f46e5; /* Indigo-600 */
+    --hover-indigo: #4338ca; /* Indigo-700 */
+    --danger-red: #dc2626; /* Red-600 */
+    --hover-red: #b91c1c; /* Red-700 */
+    --background-light: #f4f7f9;
+    --border-gray: #d1d5db; /* Gray-300 */
+    --text-dark: #1f2937; /* Gray-800 */
+    --text-medium: #374151; /* Gray-700 */
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-light);
+    /* For min-h-screen equivalent */
+    min-height: 100vh; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem; /* p-4 equivalent */
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* --- Container Card (w-full max-w-lg) --- */
+.container-card {
+    width: 100%;
+    max-width: 32rem; /* max-w-lg (512px) equivalent */
+    background-color: white;
+    padding: 1.5rem; /* p-6 equivalent */
+    border-radius: 0.75rem; /* rounded-xl equivalent */
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 5px 10px -5px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease-in-out;
+}
+
+.container-card:hover {
+    box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.15), 0 5px 15px -5px rgba(0, 0, 0, 0.06);
+}
+
+/* Responsive Padding for small screens (sm:p-8) */
+@media (min-width: 640px) {
+    .container-card {
+        padding: 2rem; /* sm:p-8 equivalent */
+    }
+}
+
+
+/* --- Headings --- */
+.heading-primary {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    color: var(--text-dark);
+    margin-bottom: 1.5rem; /* mb-6 */
+    text-align: center;
+}
+
+.heading-secondary {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 600; /* font-semibold */
+    color: var(--text-medium);
+    margin-bottom: 1rem; /* mb-4 */
+    border-bottom: 1px solid #e5e7eb; /* border-b */
+    padding-bottom: 0.5rem; /* pb-2 */
+}
+
+.spaced-heading {
+    margin-top: 2rem; /* mt-8 */
+}
+
+/* --- Welcome Box --- */
+.welcome-box {
+    margin-bottom: 1.5rem; /* mb-6 */
+    background-color: #eff6ff; /* blue-50 */
+    padding: 1rem; /* p-4 */
+    border-radius: 0.5rem; /* rounded-lg */
+    border: 1px solid #bfdbfe; /* border-blue-200 */
+}
+
+.welcome-text {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 600; /* font-semibold */
+    color: #1e40af; /* blue-800 */
+}
+
+.email-text {
+    font-size: 0.875rem; /* text-sm */
+    color: #2563eb; /* blue-600 */
+}
+
+.email-address {
+    font-weight: 500; /* font-medium */
+}
+
+/* --- Form Elements --- */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* space-y-4 */
+}
+
+.form-label {
+    display: block;
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500; /* font-medium */
+    color: var(--text-medium);
+    margin-bottom: 0.25rem; /* mb-1 */
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem; /* p-3 */
+    border: 1px solid var(--border-gray);
+    border-radius: 0.5rem; /* rounded-lg */
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Focus styles */
+#profileForm .form-input:focus {
+    border-color: var(--primary-blue);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* focus:ring-blue-500 focus:border-blue-500 */
+}
+
+#credentialForm .form-input:focus {
+    border-color: var(--secondary-indigo);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.5); /* focus:ring-indigo-500 focus:border-indigo-500 */
+}
+
+/* --- Buttons --- */
+.btn {
+    width: 100%;
+    padding: 0.75rem 1rem; /* py-3 */
+    font-weight: 600; /* font-semibold */
+    border-radius: 0.5rem; /* rounded-lg */
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--background-light); /* focus:ring-offset-2 */
+}
+
+/* Primary Button (Blue) */
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--hover-blue);
+}
+
+.btn-primary:focus {
+    box-shadow: 0 0 0 2px var(--primary-blue); /* focus:ring-blue-500 */
+}
+
+/* Secondary Button (Indigo) */
+.btn-secondary {
+    background-color: var(--secondary-indigo);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: var(--hover-indigo);
+}
+
+.btn-secondary:focus {
+    box-shadow: 0 0 0 2px var(--secondary-indigo); /* focus:ring-indigo-500 */
+}
+
+/* Danger Button (Red) */
+.btn-danger {
+    background-color: var(--danger-red);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: var(--hover-red);
+}
+
+.btn-danger:focus {
+    box-shadow: 0 0 0 2px var(--danger-red); /* focus:ring-red-500 */
+}
+
+/* Logout Section (mt-8 pt-4 border-t) */
+.logout-section {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* --- Message Box --- */
+.message-box {
+    margin-bottom: 1rem; /* mb-4 */
+    padding: 0.75rem; /* p-3 */
+    border-radius: 0.5rem; /* rounded-lg */
+    font-size: 0.875rem; /* text-sm */
+    text-align: center;
+    font-weight: 500; /* font-medium */
+    opacity: 1;
+    max-height: 100px;
+    overflow: hidden;
+}
+
+.message-success {
+    background-color: #dcfce7; /* green-100 */
+    color: #166534; /* green-800 */
+    border: 1px solid #bbf7d0;
+}
+
+.message-error {
+    background-color: #fee2e2; /* red-100 */
+    color: #991b1b; /* red-800 */
+    border: 1px solid #fca5a5;
+}
+
+/* Hidden Utility */
+.hidden {
+    display: none !important;
+    opacity: 0;
+    max-height: 0;
+    padding: 0;
+    margin: 0;
+}
+
+
+/* --- Loading Overlay --- */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: var(--primary-blue);
+    animation: spin 1s linear infinite; /* Adjusted for consistency, Tailwind uses 'linear' by default for 'spin' */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+    </style> 
+</head>
+<body class="min-h-screen-body">
+
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="dashboard-content" class="container-card">
+        <h1 class="heading-primary">User Dashboard</h1>
+        
+        <div class="welcome-box">
+            <p class="welcome-text">Welcome, <span id="welcomeName">User</span>!</p>
+            <p class="email-text">You are logged in with: <span id="userEmail" class="email-address">Loading...</span></p>
+        </div>
+        
+        <div id="dashboardMessage" class="message-box hidden transition-all duration-500"></div>
+
+        <h2 class="heading-secondary">Update Profile</h2>
+        <form id="profileForm" class="form-container">
+            <div>
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" id="firstName" name="firstName" required
+                        class="form-input">
+            </div>
+
+            <div>
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" id="lastName" name="lastName" required
+                        class="form-input">
+            </div>
+
+            <button type="submit" id="updateProfileBtn" class="btn btn-primary">
+                Update Name
+            </button>
+        </form>
+
+        <h2 class="heading-secondary spaced-heading">Change Credentials</h2>
+        
+        <form id="credentialForm" class="form-container">
+            <div>
+                <label for="currentPassword" class="form-label">Current Password (Required for any change)</label>
+                <input type="password" id="currentPassword" name="currentPassword" required
+                        class="form-input"
+                        placeholder="Enter your current password">
+            </div>
+            
+            <div>
+                <label for="newEmail" class="form-label">New Email</label>
+                <input type="email" id="newEmail" name="newEmail"
+                        class="form-input"
+                        placeholder="Enter new email address (optional)">
+            </div>
+            
+            <div>
+                <label for="newPassword" class="form-label">New Password (Min 6 chars)</label>
+                <input type="password" id="newPassword" name="newPassword"
+                        class="form-input"
+                        placeholder="Enter new password (optional)">
+            </div>
+
+            <div>
+                <label for="repeatPassword" class="form-label">Repeat New Password</label>
+                <input type="password" id="repeatPassword" name="repeatPassword"
+                        class="form-input"
+                        placeholder="Repeat new password">
+            </div>
+
+            <button type="submit" id="updateCredBtn" class="btn btn-secondary">
+                Update Email/Password
+            </button>
+        </form>
+
+        <div class="logout-section">
+            <button id="logoutBtn" class="btn btn-danger">
+                Log Out
+            </button>
+        </div>
+    </div>
+    <script type="module" defer>
+        // Set up the global scope for Firebase variables
+        let app, auth, db;
+        let currentUserId = null;
+        let isAuthReady = false;
+
+        // 1. IMPORT FIREBASE MODULES
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged, updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Enable Firebase debugging (optional, but good practice)
+        setLogLevel('debug');
+
+
+        // 2. FIREBASE CONFIGURATION & INITIALIZATION
+        // Use the same configuration as your sign-up/login pages
+        const firebaseConfig = {
+            apiKey: "AIzaSyChZeZk1nL61mkukc5PvT7CCQn7HAdP5AQ",
+            authDomain: "login-demo-4a733.firebaseapp.com",
+            projectId: "login-demo-4a733",
+            storageBucket: "login-demo-4a733.firebasestorage.app",
+            messagingSenderId: "78719888700",
+            appId: "1:78719888700:web:a5deb2ad505c25e8a04239"
+        };
+        
+        // --- Utility Functions ---
+
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const dashboardMessage = document.getElementById('dashboardMessage');
+
+        function showLoading(show) {
+            loadingOverlay.classList.toggle('hidden', !show);
+        }
+
+        function showMessage(message, isSuccess = true) {
+            dashboardMessage.textContent = message;
+            
+            // Clear all state classes
+            dashboardMessage.classList.remove('hidden', 'message-error', 'message-success');
+            
+            if (isSuccess) {
+                dashboardMessage.classList.add('message-success');
+            } else {
+                dashboardMessage.classList.add('message-error');
+            }
+            
+            // Auto-hide the message after 5 seconds
+            setTimeout(() => {
+                dashboardMessage.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // --- Core Application Logic ---
+
+        function initFirebase() {
+            try {
+                // Initialize services
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                // 3. AUTH STATE LISTENER (MANDATORY)
+                onAuthStateChanged(auth, (user) => {
+                    isAuthReady = true;
+                    showLoading(false); // Hide loading once auth state is known
+
+                    if (user) {
+                        // User is signed in.
+                        currentUserId = user.uid;
+                        document.getElementById('userEmail').textContent = user.email;
+                        fetchUserData(user.uid);
+                    } else {
+                        // User is signed out. Redirect to login.
+                        showMessage("Not logged in. Redirecting...", false);
+                        setTimeout(() => {
+                            window.location.href = 'login.html'; // Ensure this matches your login page filename
+                        }, 1500);
+                    }
+                });
+            } catch (e) {
+                console.error("Firebase Initialization Failed:", e);
+                showMessage("Application error during startup.", false);
+            }
+        }
+        
+        // 4. FETCH USER DATA FROM FIRESTORE
+        async function fetchUserData(uid) {
+            if (!db || !uid) {
+                console.warn("DB not initialized or UID missing for fetch.");
+                return;
+            }
+            showLoading(true);
+            try {
+                const docRef = doc(db, "users", uid);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('firstName').value = data.firstName || '';
+                    document.getElementById('lastName').value = data.lastName || '';
+                    document.getElementById('welcomeName').textContent = data.firstName || 'User';
+                    // Don't show success message on initial load, it's too aggressive
+                } else {
+                    console.warn("No profile document found for UID:", uid);
+                    showMessage("Warning: Profile data missing in Firestore.", false);
+                    document.getElementById('welcomeName').textContent = 'User';
+                }
+            } catch (e) {
+                console.error("Error fetching user document:", e);
+                showMessage("Error fetching profile data.", false);
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        
+        // 5. UPDATE FIRESTORE PROFILE (FIRST/LAST NAME)
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUserId || !db) return showMessage("Authentication incomplete.", false);
+
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+           
+            if (!firstName || !lastName) {
+                return showMessage("First name and Last name are required.", false);
+            }
+
+            showLoading(true);
+            try {
+                const docRef = doc(db, "users", currentUserId);
+                await updateDoc(docRef, {
+                    firstName: firstName,
+                    lastName: lastName
+                });
+                document.getElementById('welcomeName').textContent = firstName;
+                showMessage("Profile names updated successfully!", true);
+            } catch (e) {
+                console.error("Error updating profile data:", e);
+                showMessage("Failed to update profile names in database.", false);
+            } finally {
+                showLoading(false);
+            }
+        });
+        
+        
+        // 6. UPDATE AUTH CREDENTIALS (EMAIL/PASSWORD)
+        document.getElementById('credentialForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = auth.currentUser;
+            const currentPassword = document.getElementById('currentPassword').value; // Get current password
+            const newEmail = document.getElementById('newEmail').value.trim();
+            const newPassword = document.getElementById('newPassword').value.trim();
+            const repeatPassword = document.getElementById('repeatPassword').value.trim();
+            
+            if (!user) return showMessage("User not logged in.", false);
+            if (!newEmail && !newPassword) return showMessage("Please enter a new email or password.", false);
+            if (!currentPassword) return showMessage("Your current password is required for security.", false);
+
+            // Password validation
+            if (newPassword) {
+                if (newPassword.length < 6) return showMessage("New password must be at least 6 characters.", false);
+                if (newPassword !== repeatPassword) return showMessage("New passwords do not match.", false);
+            }
+            
+            // If the new email is the same as the current one, treat it as a no-change unless password is being updated
+            if (newEmail === user.email && !newPassword) return showMessage("No changes were entered.", false);
+
+            
+            showLoading(true);
+           
+            try {
+                // **STEP 1: Re-authenticate the user with their current credentials**
+                const credential = EmailAuthProvider.credential(user.email, currentPassword);
+                await reauthenticateWithCredential(user, credential);
+                
+                let statusMessage = [];
+
+                // **STEP 2: Update Email**
+                if (newEmail && newEmail !== user.email) {
+                    await updateEmail(user, newEmail);
+                    document.getElementById('userEmail').textContent = newEmail;
+                    statusMessage.push("Email updated successfully.");
+                    
+                    // Update Firestore (optional but recommended for consistency)
+                    if (db) {
+                        await updateDoc(doc(db, "users", user.uid), { email: newEmail });
+                    }
+                }
+
+                // **STEP 3: Update Password**
+                if (newPassword) {
+                    await updatePassword(user, newPassword);
+                    statusMessage.push("Password updated successfully.");
+                }
+                
+                // **STEP 4: Display Result and Clean Up**
+                showMessage(statusMessage.join(" And ") + " Your changes have been saved.", true);
+                
+                // Clear the credential fields after successful update
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newEmail').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('repeatPassword').value = '';
+
+
+            } catch (e) {
+                console.error("Error updating credentials:", e);
+                let errorMessage = "Failed to update credentials. Please check your current password and ensure the new email/password is valid.";
+                
+                // Specific error handling for clarity
+                if (e.code === 'auth/wrong-password') {
+                    errorMessage = "The current password you entered is incorrect.";
+                } else if (e.code === 'auth/invalid-email') {
+                    errorMessage = "The new email format is invalid.";
+                } else if (e.code === 'auth/requires-recent-login') {
+                    // This error should ideally be caught by the re-authentication step, but as a fallback:
+                    errorMessage = "For security, you must re-authenticate. Please check your current password and try again.";
+                } else if (e.code === 'auth/email-already-in-use') {
+                    errorMessage = "The new email address is already in use by another account.";
+                }
+
+                showMessage(errorMessage, false);
+            } finally {
+                showLoading(false);
+            }
+        });
+        
+        
+        // 7. LOGOUT FUNCTIONALITY
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            showLoading(true);
+            try {
+                await signOut(auth);
+                // onAuthStateChanged listener will handle the redirect
+            } catch (e) {
+                console.error("Logout Error:", e);
+                showMessage("Logout failed. Please check console.", false);
+                showLoading(false);
+            }
+        });
+
+        // Start Firebase initialization when the script loads
+        initFirebase();
+    </script>
+</body>
+</html>
